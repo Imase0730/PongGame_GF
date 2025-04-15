@@ -1,16 +1,17 @@
-// キー入力基本
 #include "DxLib.h"
 
-int PlayerX, PlayerY;
-int PlayerGraph;
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-	LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(
+	_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPSTR lpCmdLine,
+	_In_ int nCmdShow
+)
 {
-	int Key;
-
 	// 画面モードのセット
-	SetGraphMode(640, 480, 16);
+	SetGraphMode(1280, 720, 32);
+
+	// ウインドウのタイトルを変更する
+	SetMainWindowText(L"Pong Game");
 
 	// ウインドウモードへ変更
 	ChangeWindowMode(TRUE);
@@ -23,36 +24,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// 描画先画面を裏画面にセット
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	// グラフィックのロード
-	PlayerGraph = LoadGraph(L"Player.bmp");
-
-	// キャラクターの初期位置をセット
-	PlayerX = 0;
-	PlayerY = 0;
-
 	// ループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		// キー入力取得
-		Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+		// ----- ゲームの更新処理 ----- //
 
-		// 上を押していたら上に進む
-		if (Key & PAD_INPUT_UP) PlayerY -= 3;
 
-		// 下を押していたら下に進む
-		if (Key & PAD_INPUT_DOWN) PlayerY += 3;
-
-		// 右を押していたら右に進む
-		if (Key & PAD_INPUT_RIGHT) PlayerX += 3;
-
-		// 左を押していたら左に進む
-		if (Key & PAD_INPUT_LEFT) PlayerX -= 3;
 
 		// 画面を初期化する
 		ClearDrawScreen();
 
-		// プレイヤーを描画する
-		DrawGraph(PlayerX, PlayerY, PlayerGraph, TRUE);
+		// ----- ゲームの描画処理 ----- //
+
+		DrawBox(0, 0, 100, 200, GetColor(255, 255, 255), TRUE);
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
