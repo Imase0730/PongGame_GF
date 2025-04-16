@@ -7,6 +7,16 @@ int WINAPI WinMain(
 	_In_ int nCmdShow
 )
 {
+	// 変数の宣言
+	int key;
+	int x;
+	int y;
+
+	// 変数の初期化
+	key = 0;
+	x = 0;
+	y = 0;
+
 	// 画面モードのセット
 	SetGraphMode(1280, 720, 32);
 
@@ -29,14 +39,28 @@ int WINAPI WinMain(
 	{
 		// ----- ゲームの更新処理 ----- //
 
+		// キー入力取得
+		key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
+		// 上を押していたら上に進む
+		if (key & PAD_INPUT_UP)
+		{
+			y = y - 10;
+		}
+
+		// 下を押していたら下に進む
+		if (key & PAD_INPUT_DOWN)
+		{
+			y = y + 10;
+		}
 
 		// 画面を初期化する
 		ClearDrawScreen();
 
 		// ----- ゲームの描画処理 ----- //
 
-		DrawBox(0, 0, 100, 200, GetColor(255, 255, 255), TRUE);
+		// パドルの描画
+		DrawBox(x, y, x + 32, y + 64, GetColor(255, 255, 255), TRUE);
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
