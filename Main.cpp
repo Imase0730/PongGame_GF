@@ -104,6 +104,27 @@ int WINAPI WinMain(
 		ballX += ballVelocityX;
 		ballY += ballVelocityY;
 
+		// ボールが画面の下に接触したら
+		if (ballY >= SCREEN_HEIGHT - BALL_SIZE)
+		{
+			ballVelocityY = -ballVelocityY;
+		}
+		// ボールが画面の上に接触したら
+		if (ballY <= 0)
+		{
+			ballVelocityY = -ballVelocityY;
+		}
+		// ボールが画面の左に接触したら
+		if (ballX <= 0)
+		{
+			ballVelocityX = -ballVelocityX;
+		}
+		// ボールが画面の右に接触したら
+		if (ballX >= SCREEN_WIDTH - BALL_SIZE)
+		{
+			ballVelocityX = -ballVelocityX;
+		}
+
 		// 画面を初期化する
 		ClearDrawScreen();
 
