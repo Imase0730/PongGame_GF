@@ -9,9 +9,23 @@ int WINAPI WinMain(
 {
 	// ----- 定数宣言 ----- //
 	
+	// シーンの列挙子の定義
+	enum class Scene
+	{
+		Title,
+		GamePlay,
+		GameOver,
+	};
+
+	// タイトルの文字列
+	const wchar_t TITLE[] = L"Pong Game";
+
 	// 画面のサイズ
 	const int SCREEN_WIDTH = 1280;
 	const int SCREEN_HEIGHT = 720;
+
+	// 文字のサイズ
+	const int FONT_SIZE = 50;
 
 	// パドルの大きさ
 	const int PADDLE_WIDTH = 32;
@@ -43,6 +57,8 @@ int WINAPI WinMain(
 	int ballY;
 	int ballVelocityX;
 	int ballVelocityY;
+	int score;
+	Scene scene;
 
 	// ----- 変数の初期化 ----- //
 	key = 0;
@@ -52,12 +68,14 @@ int WINAPI WinMain(
 	ballY = BALL_Y;
 	ballVelocityX = BALL_SPEED_X;
 	ballVelocityY = BALL_SPEED_Y;
+	score = 0;
+	scene = Scene::Title;
 
 	// 画面モードのセット
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
 
 	// ウインドウのタイトルを変更する
-	SetMainWindowText(L"Pong Game");
+	SetMainWindowText(TITLE);
 
 	// ウインドウモードへ変更
 	ChangeWindowMode(TRUE);
@@ -70,6 +88,9 @@ int WINAPI WinMain(
 	// 描画先画面を裏画面にセット
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	// 文字のサイズを変更する
+	SetFontSize(FONT_SIZE);
+
 	// ループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
@@ -77,6 +98,24 @@ int WINAPI WinMain(
 
 		// キー入力取得
 		key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+
+		///////////////////////////////////////////////////////////////////////////////////
+		// タイトルだったら
+		if (scene == Scene::Title)
+		{
+		}
+
+		// ゲーム中だったら
+		if (scene == Scene::GamePlay)
+		{
+		}
+
+		// ゲームオーバーだったら
+		if (scene == Scene::GameOver)
+		{
+		}
+		///////////////////////////////////////////////////////////////////////////////////
+
 
 		// 上を押していたら上に進む
 		if (key & PAD_INPUT_UP)
@@ -104,6 +143,17 @@ int WINAPI WinMain(
 		ballX += ballVelocityX;
 		ballY += ballVelocityY;
 
+		// パドルとボールの衝突判定
+		if ( (ballVelocityX < 0)	// ボールが左方向へ移動しているなら
+		  && ((paddleX <= ballX + BALL_SIZE) && (ballX <= paddleX + PADDLE_WIDTH))	// X軸の交差判定
+		  && ((paddleY <= ballY + BALL_SIZE) && (ballY <= paddleY + PADDLE_HEIGHT))	// Y軸の交差判定
+		   )
+		{
+			ballVelocityX = -ballVelocityX;
+			// 得点を加算
+			score++;
+		}
+
 		// ボールが画面の下に接触したら
 		if (ballY >= SCREEN_HEIGHT - BALL_SIZE)
 		{
@@ -130,11 +180,34 @@ int WINAPI WinMain(
 
 		// ----- ゲームの描画処理 ----- //
 
+		///////////////////////////////////////////////////////////////////////////////////
+		// タイトルだったら
+		if (scene == Scene::Title)
+		{
+			// タイトルの表示
+			DrawFormatString(100, 100, GetColor(255, 255, 255), TITLE);
+		}
+		
+		// ゲーム中だったら
+		if (scene == Scene::GamePlay)
+		{
+		}
+
+		// ゲームオーバーだったら
+		if (scene == Scene::GameOver)
+		{
+		}
+		///////////////////////////////////////////////////////////////////////////////////
+
+
 		// パドルの描画
 		DrawBox(paddleX, paddleY, paddleX + PADDLE_WIDTH, paddleY + PADDLE_HEIGHT, GetColor(255, 255, 255), TRUE);
 
 		// ボールの描画
 		DrawBox(ballX, ballY, ballX + BALL_SIZE, ballY + BALL_SIZE, GetColor(255, 255, 255), TRUE);
+
+		// 得点の表示
+		DrawFormatString(0, 0, GetColor(255, 255, 255), L"SCORE:%d", score);
 
 		// 裏画面の内容を表画面に反映させる
 		ScreenFlip();
