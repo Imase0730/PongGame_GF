@@ -42,8 +42,8 @@ int WINAPI WinMain(
 	const int BALL_SIZE = 32;
 
 	// ボールの初期位置
-	const int BALL_X = SCREEN_WIDTH - BALL_SIZE;
-	const int BALL_Y = SCREEN_HEIGHT / 2 - BALL_SIZE / 2;
+	const int BALL_START_X = SCREEN_WIDTH - BALL_SIZE;
+	const int BALL_START_Y = SCREEN_HEIGHT / 2 - BALL_SIZE / 2;
 
 	// ボールの初期速度
 	const int BALL_SPEED_X = -5;
@@ -64,8 +64,8 @@ int WINAPI WinMain(
 	key = 0;
 	paddleX = PADDLE_START_X;
 	paddleY = PADDLE_START_Y;
-	ballX = BALL_X;
-	ballY = BALL_Y;
+	ballX = BALL_START_X;
+	ballY = BALL_START_Y;
 	ballVelocityX = BALL_SPEED_X;
 	ballVelocityY = BALL_SPEED_Y;
 	score = 0;
